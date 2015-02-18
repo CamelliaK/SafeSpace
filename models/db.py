@@ -47,8 +47,15 @@ auth = Auth(db)
 service = Service()
 plugins = PluginManager()
 
-## create all tables needed by auth if not custom tables
-auth.define_tables(username=False, signature=False)
+## Set-up the auth_user table
+auth.settings.extra_fields['auth_user']= [
+                Field('picture', 'upload'),
+                Field('personalQuote', readable=False, writable=False),
+                Field('displayFullName', 'boolean', readable=False, writable=False),
+                Field('isPagePrivate', 'boolean', readable=False, writable=False),
+                Field('colorScheme', readable=False, writable=False)]
+
+auth.define_tables(username=True, signature=False)
 
 ## configure email
 mail = auth.settings.mailer
@@ -85,4 +92,3 @@ use_janrain(auth, filename='private/janrain.key')
 
 ## after defining tables, uncomment below to enable auditing
 # auth.enable_record_versioning(db)
-

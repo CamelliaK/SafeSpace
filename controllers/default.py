@@ -17,9 +17,15 @@ def index():
     if you need a simple wiki simply replace the two lines below with:
     return auth.wiki()
     """
-    response.flash = T("Welcome to web2py!")
+    response.flash = T("Welcome to SafeSpace!")
     return dict(message=T('Hello World'))
 
+def profile():
+    localPosts = "Test Post"
+    return dict(posts = localPosts)
+
+def home():
+    return dict()
 
 def user():
     """
