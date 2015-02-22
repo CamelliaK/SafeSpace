@@ -1,10 +1,6 @@
 {{extend 'layout.html'}}
-
-<h1>
-    Camellia Khodayari
-</h1>
-
-<i>Beautiful</i> and <b>intelligent</b> woman!
-
-<h2>Posts:</h2><br>
-{{=posts}}
+<img src="{{=URL( 'download',args=profilePicture)}}" width=150px height=150px/>
+<h1>{{=personalName}}</h1> {{=username}}
+{{if personalQuote is not None:}}
+<h2>"{{=personalQuote}}"</h2>
+{{pass}}

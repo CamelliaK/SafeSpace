@@ -10,20 +10,33 @@
 #########################################################################
 
 def index():
-    """
-    example action using the internationalization operator T and flash
-    rendered by views/default/index.html or views/generic.html
-
-    if you need a simple wiki simply replace the two lines below with:
-    return auth.wiki()
-    """
-    response.flash = T("Welcome to SafeSpace!")
-    return dict(message=T('Hello World'))
+    return dict()
 
 def profile():
-    localPosts = "Test Post"
-    return dict(posts = localPosts)
+    # Username from url
+    username = request.args(0)
+    
+    # Find user in db
+    user = db(db.auth_user.username == username).select().first()
+    
+    # Generate name to pass to page
+    firstName = user.first_name
+    lastName = user.last_name
+    showLast = user.displayFullName
+    personalName = firstName
+    if showLast:
+        personalName += ' ' + lastName
+        
+    # Get profile picture for page
+    profilePicture = user.picture
+    
+    # Get quote
+    personalQuote = user.personalQuote
+    
+    return dict(username = username, personalName = personalName, profilePicture = profilePicture, personalQuote = personalQuote)
 
+
+    
 def home():
     return dict()
 

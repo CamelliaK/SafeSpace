@@ -4,7 +4,7 @@ from datetime import datetime
 
 db.define_table('posts',
                 Field('senderID', 'reference auth_user'),
-                Field('recieverID' 'reference auth_user'),
+                Field('recieverID', 'reference auth_user'),
                 Field('body'),
                 Field('likes', 'integer'),
                 Field('approved', 'boolean'),
