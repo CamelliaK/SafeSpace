@@ -1,6 +1,41 @@
 {{extend 'layout.html'}}
 <img src="{{=URL( 'download',args=profilePicture)}}" width=150px height=150px/>
+
 <h1>{{=personalName}}</h1> {{=username}}
 {{if personalQuote is not None:}}
+
 <h2>"{{=personalQuote}}"</h2>
+{{pass}}
+
+<h3>Posts:</h3>
+{{if len(posts) > 0:}}
+    <ul>
+        {{for post in posts:}}
+            <li>{{=post.body}} - {{=post.likes}} likes!</li>
+        {{pass}}
+    </ul>
+{{else:}}
+    <br>You don't have any posts yet!
+{{pass}}
+
+<h3>Friends:</h3>
+{{if len(friends) > 0:}}
+    <ul>
+        {{for friend in friends:}}
+            <li>{{=friend.first_name + " " + friend.last_name}}</li>
+        {{pass}}
+    </ul>
+{{else:}}
+    <br>You have no friends yet :(
+{{pass}}
+
+<h3>Mutual Friends:</h3>
+{{if len(mutualFriends) > 0:}}
+    <ul>
+        {{for friend in mutualFriends:}}
+            <li>{{=friend.first_name + " " + friend.last_name}}</li>
+        {{pass}}
+    </ul>
+{{else:}}
+    You don't have any mutual friends!
 {{pass}}

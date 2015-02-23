@@ -33,10 +33,27 @@ def profile():
     # Get quote
     personalQuote = user.personalQuote
     
-    return dict(username = username, personalName = personalName, profilePicture = profilePicture, personalQuote = personalQuote)
-
-
+    # Get posts
+    posts = db((db.posts.recieverID == user) & (db.posts.approved == True)).select()
     
+    # Get Relationships
+    relationships = db(db.relationships.userID == user).select().first()
+    
+    # Get Friends
+    friends = relationships.friends
+    
+    # Find Mutual Friends
+    viewerFriends = db(db.relationships.userID == auth.user).select().first().friends
+    mutualFriends = set(friends) & set(viewerFriends)
+    
+    return dict(username = username, 
+                 personalName = personalName, 
+                 profilePicture = profilePicture, 
+                 personalQuote = personalQuote, 
+                 posts = posts, 
+                 friends = friends, 
+                 mutualFriends = mutualFriends)
+
 def home():
     return dict()
 

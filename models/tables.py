@@ -12,6 +12,7 @@ db.define_table('posts',
                 Field('timePosted', 'datetime'))
 
 db.define_table('relationships',
+                Field('userID', 'reference auth_user'),
                 Field('friends', 'list:reference auth_user'),
                 Field('favorites', 'list:reference auth_user'),
                 Field('blocked', 'list:reference auth_user'),
