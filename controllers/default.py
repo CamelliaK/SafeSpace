@@ -43,8 +43,11 @@ def profile():
     friends = relationships.friends
     
     # Find Mutual Friends
-    viewerFriends = db(db.relationships.userID == auth.user).select().first().friends
-    mutualFriends = set(friends) & set(viewerFriends)
+    if auth.user:
+        viewerFriends = db(db.relationships.userID == auth.user).select().first().friends
+        mutualFriends = set(friends) & set(viewerFriends)
+    else:
+        mutualFriends = None
     
     return dict(username = username, 
                  personalName = personalName, 
@@ -53,6 +56,17 @@ def profile():
                  posts = posts, 
                  friends = friends, 
                  mutualFriends = mutualFriends)
+
+@auth.requires_login()
+def new_post():
+    messageBody = request.vars.your_message
+
+    if messageBody:
+        response.flash = "Logged In"
+        #if not db.posts.validate_and_insert(body=messageBody, ):
+        #    response.flash = "Error submitting the message"
+
+    return
 
 def home():
     return dict()

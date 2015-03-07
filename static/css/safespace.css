@@ -1,0 +1,12 @@
+body { padding-top: 40px; }
+@media screen and (max-width: 768px) {
+    body { padding-top: 0px; }
+    .navbar-collapse .nav > .divider-vertical { display: none; }
+}
+
+.navbar .divider-vertical {
+    height: 30px;
+    margin: 10px 9px;
+    border-right: 1px solid #ffffff;
+    border-left: 1px solid #E6E6E6;
+}
