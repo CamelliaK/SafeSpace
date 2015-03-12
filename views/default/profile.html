@@ -1,64 +1,94 @@
 {{extend 'layout.html'}}
-<img src="{{=URL( 'download',args=profilePicture)}}" width=150px height=150px/>
 
-<h1>{{=personalName}}</h1> {{=username}}
-{{if personalQuote is not None:}}
+<div class="ssSidebar-wrapper">
+    <div class="ssPageContentWrapper">
+        <div class="profile-background">
+            <div class="container profile-container">
+                <div class="row">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <img src="{{=URL( 'download',args=profilePicture)}}" class="profile-image" />
+                        </div>
+                        <div class="col-sm-6">
+                            <h1>{{=personalName}} <small>{{=username}}</small></h1>
+                            {{if personalQuote is not None:}}
+                                <h2>"{{=personalQuote}}"</h2>
+                            {{pass}}
+                        </div>
+                    </div>
+                    <div class="spacer"></div>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <form id="postForm">
+                                <div class="form-group">
+                                    <label for="your_message">Leave a message</label>
+                                    <textarea rows=3 name="your_message" id="your_message" class="form-control" placeholder="Enter a nice message"></textarea>
+                                </div>
+                                <input class="btn btn-primary" type="submit" />
+                            </form>
+                            <div id="postAnother" style="display:none">
+                                <div class="panel">
+                                    <b>You message was submitted for review!</b>
+                                    <button class="btn btn-default" onclick="jQuery('#postAnother').hide(); jQuery('#postForm').show()">Submit Another</button>
+                                </div>
+                            </div>
 
-<h2>"{{=personalQuote}}"</h2>
-{{pass}}
-
-<form id="postForm">
-    <div class="form-group">
-        <label for="your_message">Leave a message</label>
-        <input name="your_message" id="your_message" class="form-control" placeholder="Enter a nice message" />
+                            {{if len(posts) > 0:}}
+                                <div class="spacer-small"></div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Posts</div>
+                                    <ul class="list-group">
+                                        {{for post in posts:}}
+                                            <li class="list-group-item">{{=post.body}}</li>
+                                        {{pass}}
+                                    </ul>
+                                </div>
+                            {{else:}}
+                                <br>You don't have any posts yet!
+                            {{pass}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <input class="btn btn-primary" type="submit" />
-</form>
-<div id="postAnother" style="display:none">
-    <div class="panel">
-        <b>You message was submitted for review!</b>
-        <button class="btn btn-default" onclick="jQuery('#postAnother').hide(); jQuery('#postForm').show()">Submit Another</button>
+    <div class="ssSidebar">
+        <div class="panel panel-default">
+            <div class="panel-heading">{{=len(friends)}} Friends</div>
+            {{if len(friends) > 0:}}
+                <ul class="list-group">
+                    {{for friend in friends:}}
+                        <li class="list-group-item">{{=friend.first_name + " " + friend.last_name}}</li>
+                    {{pass}}
+                </ul>
+            {{else:}}
+                <br>You have no friends yet :(
+            {{pass}}
+        </div>
+        {{if mutualFriends:}}
+            {{if len(mutualFriends) > 0:}}
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{=len(mutualFriends)}} Mutual Friends</div>
+                    <div class="panel-body">
+                        {{for friend in mutualFriends:}}
+                            <div class="row-fluid">
+                                <button class="btn btn-default" style="width: 100%; margin: 4px;">
+                                    <img src="{{=URL('download', args=friend.picture)}}" style="width: 20px; height: 20px" />
+                                    {{=friend.first_name + " " + friend.last_name}}
+                                </button>
+                            </div>
+                        {{pass}}
+                    </div>
+                </div>
+            </div>
+            {{pass}}
+        {{pass}}
     </div>
 </div>
 
-<h3>Posts:</h3>
-{{if len(posts) > 0:}}
-    <ul>
-        {{for post in posts:}}
-            <li>{{=post.body}} - {{=post.likes}} likes!</li>
-        {{pass}}
-    </ul>
-{{else:}}
-    <br>You don't have any posts yet!
-{{pass}}
-
-<h3>Friends:</h3>
-{{if len(friends) > 0:}}
-    <ul>
-        {{for friend in friends:}}
-            <li>{{=friend.first_name + " " + friend.last_name}}</li>
-        {{pass}}
-    </ul>
-{{else:}}
-    <br>You have no friends yet :(
-{{pass}}
-
-{{if mutualFriends:}}
-    <h3>Mutual Friends:</h3>
-    {{if len(mutualFriends) > 0:}}
-        <ul>
-            {{for friend in mutualFriends:}}
-                <li>{{=friend.first_name + " " + friend.last_name}}</li>
-            {{pass}}
-        </ul>
-    {{else:}}
-        You don't have any mutual friends!
-    {{pass}}
-{{pass}}
-
 <script>
     jQuery('#postForm').submit(function() {
-        ajax('{{=URL('new_post')}}, ['your_message', 'user']);
+        ajax("{{=URL('new_post', args=[username])}}", ['your_message', 'user']);
         jQuery('#postForm').hide();
         jQuery('#postAnother').show();
         jQuery('#your_message').val('');

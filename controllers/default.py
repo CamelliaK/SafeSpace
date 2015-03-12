@@ -57,14 +57,20 @@ def profile():
                  friends = friends, 
                  mutualFriends = mutualFriends)
 
-@auth.requires_login()
 def new_post():
     messageBody = request.vars.your_message
 
+    if not auth.user:
+        response.flash = "You aren't logged in!"
+        return
+    
     if messageBody:
-        response.flash = "Logged In"
-        #if not db.posts.validate_and_insert(body=messageBody, ):
-        #    response.flash = "Error submitting the message"
+        recipient = db(db.auth_user.username == request.args(0)).select().first()
+        ret = db.posts.validate_and_insert(senderID=auth.user, recieverID=recipient, body=messageBody, timePosted=datetime.utcnow())
+        if ret.id:
+            response.flash = "Successfully posted!"
+        else:
+            response.flash = "failed to post"
 
     return
 

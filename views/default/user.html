@@ -1,24 +1,62 @@
 {{extend 'layout.html'}}
 
-<h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2>
-<div id="web2py_user_form">
-    {{
-        if request.args(0)=='login' and not session.auth_2_factor_user:
-            if not 'register' in auth.settings.actions_disabled:
-                form.add_button(T('Register'),URL(args='register', vars={'_next': request.vars._next} if request.vars._next else None),_class='btn btn-default')
-            pass
-            if not 'request_reset_password' in auth.settings.actions_disabled:
-                form.add_button(T('Lost Password'),URL(args='request_reset_password'),_class='btn btn-default')
-            pass
-        pass
-        =form
-    }}
+<div class="ssFrontBody">
+    <div class="container">
+    <!-- <h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2> -->
+
+    <!-- Custom Login Form =============================================== -->
+        <img src="{{=URL('static','images/sun.svg')}}" id="sun" />
+        <div id="backGradient"></div>
+        <div class="row">
+            <p class="ssTitle">SafeSpace</p>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-4">
+                <!-- -->
+                <form id="loginForm" class="ssForm">
+                    <input name="username" class="form-control" placeholder="Email or Username" />
+                    <input name="password" class="form-control" placeholder="Password" />
+                    <button class="btn btn-primary btn-block" type="submit">Log in</button>
+                </form>
+                <!-- -->
+                <!--
+                <form id="registerForm" class="ssForm">
+                    <input name="firstName" class="form-control" placeholder="First Name" />
+                    <input name="lastName" class="form-control" placeholder="Last Name" />
+                    <input name="email" class="form-control" placeholder="E-mail" />
+                    <input name="username" class="form-control" placeholder="Username" />
+                    <input name="password" class="form-control" placeholder="Password" />
+                    <input name="confirmPassword" class="form-control" placeholder="Confirm Password" />
+                    <button class="btn btn-default btn-block" type="submit">Sign up</button>
+                </form>
+                -->
+            </div>
+        </div>
+        <!-- End Custon Login Form =========================================== -->
+
+        <!--
+        <div id="web2py_user_form">
+            {{
+                if request.args(0)=='login' and not session.auth_2_factor_user:
+                    if not 'register' in auth.settings.actions_disabled:
+                        form.add_button(T('Register'),URL(args='register', vars={'_next': request.vars._next} if request.vars._next else None),_class='btn btn-default')
+                    pass
+                    if not 'request_reset_password' in auth.settings.actions_disabled:
+                        form.add_button(T('Lost Password'),URL(args='request_reset_password'),_class='btn btn-default')
+                    pass
+                pass
+                =form
+            }}
+        </div>
+
+        <script language="javascript">
+            jQuery("#web2py_user_form input:visible:enabled:first").focus();
+            {{if request.args(0)=='register':}}
+                web2py_validate_entropy(jQuery('#auth_user_password'),100);
+            {{elif request.args(0) in ('change_password','reset_password'):}}
+                web2py_validate_entropy(jQuery('#no_table_new_password'),100);
+            {{pass}}
+        </script>
+        -->
+    </div>
 </div>
-<script language="javascript">
-    jQuery("#web2py_user_form input:visible:enabled:first").focus();
-    {{if request.args(0)=='register':}}
-        web2py_validate_entropy(jQuery('#auth_user_password'),100);
-    {{elif request.args(0) in ('change_password','reset_password'):}}
-        web2py_validate_entropy(jQuery('#no_table_new_password'),100);
-    {{pass}}
-</script>

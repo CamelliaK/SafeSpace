@@ -1,4 +1,19 @@
-body { padding-top: 40px; }
+@font-face {
+    font-family: 'orange_juice';
+    src: url('../fonts/orange_juice_2.0_webfont.eot');
+    src: url('../fonts/orange_juice_2.0_webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/orange_juice_2.0_webfont.woff2') format('woff2'),
+         url('../fonts/orange_juice_2.0_webfont.woff') format('woff'),
+         url('../fonts/orange_juice_2.0_webfont.ttf') format('truetype'),
+         url('../fonts/orange_juice_2.0_webfont.svg#orange_juiceregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html { height: 100%; }
+body { height: 100%; }
+
+body { padding-top: 50px; }
 @media screen and (max-width: 768px) {
     body { padding-top: 0px; }
     .navbar-collapse .nav > .divider-vertical { display: none; }
@@ -9,4 +24,120 @@ body { padding-top: 40px; }
     margin: 10px 9px;
     border-right: 1px solid #ffffff;
     border-left: 1px solid #E6E6E6;
+}
+
+.ssForm input {
+    margin-top: 4px;
+}
+
+.ssForm button {
+    margin-top: 12px;
+    margin-bottom: 10px;
+}
+
+.ssTitle {
+    font-family: "orange_juice";
+    text-align: center;
+    font-size: 8em;
+    position: relative;
+    margin-top: -80px;
+}
+
+.profile-container {
+    padding-top: 20px;
+}
+
+#sun {
+    width: 50%;
+    display:block;
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ssFrontBody {
+    background: #ec9408;
+    height: 100%;
+    position: relative;
+    z-index: -2;
+}
+
+.profile-background {
+    background: #FF9933;
+    position: relative;
+    z-index: -2;
+    height: 100%;
+}
+
+.profile-image {
+    width: 200px;
+    height: 200px;
+    border: 1px solid #ccc;
+    padding: 4px;
+    background: white;
+    border-radius: 4px;
+}
+
+#backGradient {
+    top: -20%;
+    left: 25%;
+    width: 50vw;
+    height: 50vw;
+    position: absolute;
+    z-index: -1;
+    background: -webkit-radial-gradient(circle farthest-side, #febe43, #ec9408);
+    background: radial-gradient(circle farthest-side, #febe43, #ec9408);
+}
+
+.ss-navbar-brand {
+    font-family: "orange_juice";
+    font-size: 200%;
+}
+
+.ssSidebar-wrapper {
+    padding-right: 0;
+    height: 100%;
+}
+
+.ssSidebar-wrapper {
+    padding-right: 250px;
+}
+
+.ssPageContentWrapper {
+    width: 75%;
+    height: 90%;
+    position: absolute;
+}
+
+.ssSidebar {
+    position: fixed;
+    right: 250px;
+    z-index: 100;
+    width: 25%;
+    margin-right: -250px;
+    height: 100%;
+    overflow-y: auto;
+    background: white;
+}
+
+.spacer {
+    height: 60px;
+}
+
+.spacer-small {
+    height: 30px;
+}
+
+.innerColor {
+    background: #febe43;
+}
+
+.footer {
+  z-index: 200;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #f5f5f5;
 }

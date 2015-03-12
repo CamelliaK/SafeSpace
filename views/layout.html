@@ -36,15 +36,17 @@
 
     <!-- include stylesheets -->
     {{
-    response.files.insert(0,URL('static','css/web2py.css'))
-    response.files.insert(1,URL('static','css/bootstrap.min.css'))
-    response.files.insert(2,URL('static','css/safespace.css'))
-    response.files.insert(3,URL('static','css/bootstrap-responsive.min.css'))
-    response.files.insert(4,URL('static','css/web2py_bootstrap.css'))
+        response.files.insert(0,URL('static','css/web2py.css'))
+        response.files.insert(1,URL('static','css/bootstrap.min.css'))
+        response.files.insert(2,URL('static','css/safespace.css'))
+        response.files.insert(3,URL('static','css/bootstrap-responsive.min.css'))
     }}
 
     {{include 'web2py_ajax.html'}}
 
+    <!-- Google Lora Font -->
+    <link href='http://fonts.googleapis.com/css?family=Lora' rel='stylesheet' type='text/css'>
+    
     <!-- uncomment here to load jquery-ui
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-lightness/jquery-ui.css" type="text/css" media="all" />
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js" type="text/javascript"></script>
@@ -67,7 +69,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href={{=URL('default', 'home')}}>SafeSpace</a>
+                <a class="navbar-brand ss-navbar-brand" href={{=URL('home')}}>SafeSpace</a>
             </div><!-- End Nav Header -->
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
                 <div class="nav navbar-nav">
@@ -80,14 +82,16 @@
                 </div>
                 <!-- Leftmost tabs on navbar -->
                 <ul class="nav navbar-nav navbar-right">
+                    
                     {{if auth.user:}}
-                    <li><a >{{=auth.user.first_name}}</a></li>
+                    <li><a href={{=URL('profile', args=[auth.user.username])}}>{{=auth.user.first_name}}</a></li>
                     {{pass}}
-                    <li><a><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
+                    
+                    <li><a href={{=URL('home')}}><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
                     <li class="divider-vertical"></li>
-                    <li><a><span class="glyphicon glyphicon-bell" aria-hidden="true"></span></a></li>
-                    <li><a><span class="glyphicon glyphicon-flag" aria-hidden="true"></span></a></li>
                     <li><a><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a></li>
+                    <li><a><span class="glyphicon glyphicon-flag" aria-hidden="true"></span></a></li>
+                    <li><a><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a></li>
                     <li><a><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></a></li>
                 </ul>
             </div><!-- End Nav Collapse -->
@@ -96,9 +100,7 @@
     <!-- End Navbar ============================================== -->
 
     <!-- Content from including files ============================ -->
-         <div class="container">
-             {{include}}
-         </div>
+         {{include}}
     <!-- End Main Content ======================================== -->
 
     <!-- Footer ================================================== -->
@@ -134,6 +136,6 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   </script>
   <!-- End Google Analytics -->
   {{pass}}
-  <script src="{{=URL('static','js/share.js',vars=dict(static=URL('static','images')))}}"></script>
+  <!--<script src="{{=URL('static','js/share.js',vars=dict(static=URL('static','images')))}}"></script>-->
 </body>
 </html>
