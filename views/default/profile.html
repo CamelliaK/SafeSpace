@@ -19,19 +19,29 @@
                     <div class="spacer"></div>
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <form id="postForm">
-                                <div class="form-group">
-                                    <label for="your_message">Leave a message</label>
-                                    <textarea rows=3 name="your_message" id="your_message" class="form-control" placeholder="Enter a nice message"></textarea>
+                            {{if auth.user is not None:}}
+                                {{if auth.user.username != username:}}
+                                    <form id="postForm">
+                                        <div class="form-group">
+                                            <label for="your_message">Leave a message</label>
+                                            <textarea rows=3 name="your_message" id="your_message" class="form-control" placeholder="Enter a nice message"></textarea>
+                                        </div>
+                                        <input class="btn btn-primary" type="submit" />
+                                    </form>
+                                    <div id="postAnother" style="display:none">
+                                        <div class="panel">
+                                            <b>You message was submitted for review!</b>
+                                            <button class="btn btn-default" onclick="jQuery('#postAnother').hide(); jQuery('#postForm').show()">Submit Another</button>
+                                        </div>
+                                    </div>
+                                {{pass}}
+                            {{else:}}
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <a class="btn btn-default" href="{{=URL('user', args=['login'])}}">Log in</a> to leave {{=personalName}} a message!
+                                    </div>
                                 </div>
-                                <input class="btn btn-primary" type="submit" />
-                            </form>
-                            <div id="postAnother" style="display:none">
-                                <div class="panel">
-                                    <b>You message was submitted for review!</b>
-                                    <button class="btn btn-default" onclick="jQuery('#postAnother').hide(); jQuery('#postForm').show()">Submit Another</button>
-                                </div>
-                            </div>
+                            {{pass}}
 
                             {{if len(posts) > 0:}}
                                 <div class="spacer-small"></div>
@@ -53,35 +63,58 @@
         </div>
     </div>
     <div class="ssSidebar">
-        <div class="panel panel-default">
-            <div class="panel-heading">{{=len(friends)}} Friends</div>
-            {{if len(friends) > 0:}}
-                <ul class="list-group">
-                    {{for friend in friends:}}
-                        <li class="list-group-item">{{=friend.first_name + " " + friend.last_name}}</li>
-                    {{pass}}
-                </ul>
-            {{else:}}
-                <br>You have no friends yet :(
-            {{pass}}
-        </div>
-        {{if mutualFriends:}}
-            {{if len(mutualFriends) > 0:}}
-                <div class="panel panel-default">
-                    <div class="panel-heading">{{=len(mutualFriends)}} Mutual Friends</div>
-                    <div class="panel-body">
-                        {{for friend in mutualFriends:}}
+        {{if friends is not None:}}
+            <div class="panel panel-default">
+                <div class="panel-heading"><p class="badge">{{=len(friends)}}</p> Friends</div>
+                <div class="panel-body">
+                    {{if len(friends) > 0:}}
+                        {{for friend in friends:}}
                             <div class="row-fluid">
-                                <button class="btn btn-default" style="width: 100%; margin: 4px;">
+                                <a class="btn btn-default" style="width: 100%; margin: 4px;" href="{{=URL('profile', args=[friend.username])}}">
                                     <img src="{{=URL('download', args=friend.picture)}}" style="width: 20px; height: 20px" />
                                     {{=friend.first_name + " " + friend.last_name}}
-                                </button>
+                                </a>
                             </div>
                         {{pass}}
-                    </div>
+                    {{else:}}
+                        <br>You have no friends yet :(
+                    {{pass}}
                 </div>
             </div>
-            {{pass}}
+        {{pass}}
+        {{if mutualFriends is not None:}}
+            <div class="panel panel-default">
+                <div class="panel-heading"><p class="badge">{{=len(mutualFriends)}}</p> Mutual Friends</div>
+                <div class="panel-body">
+                    {{if len(mutualFriends) > 0:}}
+                        {{for friend in mutualFriends:}}
+                            <div class="row-fluid">
+                                <a class="btn btn-default" style="width: 100%; margin: 4px;" href="{{=URL('profile', args=[friend.username])}}">
+                                    <img src="{{=URL('download', args=friend.picture)}}" style="width: 20px; height: 20px" />
+                                    {{=friend.first_name + " " + friend.last_name}}
+                                </a>
+                            </div>
+                        {{pass}}
+                    {{pass}}
+                </div>
+            </div>
+        {{pass}}
+        {{if pendingFriends is not None:}}
+            <div class="panel panel-default">
+                <div class="panel-heading"><p class="badge">{{=len(pendingFriends)}}</p> Pending Friend Invites</div>
+                <div class="panel-body">
+                    {{if len(pendingFriends) > 0:}}
+                        {{for friend in pendingFriends:}}
+                            <div class="row-fluid">
+                                <a class="btn btn-default" style="width: 100%; margin: 4px;" href="{{=URL('profile', args=[friend.username])}}">
+                                    <img src="{{=URL('download', args=friend.picture)}}" style="width: 20px; height: 20px" />
+                                    {{=friend.first_name + " " + friend.last_name}}
+                                </a>
+                            </div>
+                        {{pass}}
+                    {{pass}}
+                </div>
+            </div>
         {{pass}}
     </div>
 </div>

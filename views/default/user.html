@@ -1,3 +1,4 @@
+{{navbar_disabled = True}}
 {{extend 'layout.html'}}
 
 <div class="ssFrontBody">
@@ -5,31 +6,30 @@
     <!-- <h2>{{=T( request.args(0).replace('_',' ').capitalize() )}}</h2> -->
 
     <!-- Custom Login Form =============================================== -->
-        <img src="{{=URL('static','images/sun.svg')}}" id="sun" />
         <div id="backGradient"></div>
+        <img src="{{=URL('static','images/sun.svg')}}" id="sun" />
         <div class="row">
             <p class="ssTitle">SafeSpace</p>
         </div>
         <div class="row">
             <div class="col-sm-4 col-sm-offset-4">
-                <!-- -->
-                <form id="loginForm" class="ssForm">
-                    <input name="username" class="form-control" placeholder="Email or Username" />
-                    <input name="password" class="form-control" placeholder="Password" />
-                    <button class="btn btn-primary btn-block" type="submit">Log in</button>
-                </form>
-                <!-- -->
-                <!--
-                <form id="registerForm" class="ssForm">
-                    <input name="firstName" class="form-control" placeholder="First Name" />
-                    <input name="lastName" class="form-control" placeholder="Last Name" />
-                    <input name="email" class="form-control" placeholder="E-mail" />
-                    <input name="username" class="form-control" placeholder="Username" />
-                    <input name="password" class="form-control" placeholder="Password" />
-                    <input name="confirmPassword" class="form-control" placeholder="Confirm Password" />
-                    <button class="btn btn-default btn-block" type="submit">Sign up</button>
-                </form>
-                -->
+                {{if request.args(0) == 'login':}}
+                    <form id="loginForm" class="ssForm">
+                        <input name="username" id="username" class="form-control" placeholder="Username" />
+                        <input name="password" id="password" class="form-control" placeholder="Password" />
+                        <input class="btn btn-primary btn-block" type="submit" value="Log in" />
+                    </form>
+                {{elif request.args(0) == 'register':}}
+                    <form id="registerForm" class="ssForm">
+                        <input name="firstName" class="form-control" placeholder="First Name" />
+                        <input name="lastName" class="form-control" placeholder="Last Name" />
+                        <input name="email" class="form-control" placeholder="E-mail" />
+                        <input name="username" class="form-control" placeholder="Username" />
+                        <input name="password" class="form-control" placeholder="Password" />
+                        <input name="confirmPassword" class="form-control" placeholder="Confirm Password" />
+                        <button class="btn btn-default btn-block" type="submit">Sign up</button>
+                    </form>
+                {{pass}}
             </div>
         </div>
         <!-- End Custon Login Form =========================================== -->
@@ -60,3 +60,10 @@
         -->
     </div>
 </div>
+
+<script>
+    jQuery('#loginForm').submit(function() {
+        ajax('{{=URL('manual_login')}}', ['username', 'password'], ":eval");
+        return false;
+    });
+</script>

@@ -34,20 +34,23 @@ def profile():
     personalQuote = user.personalQuote
     
     # Get posts
-    posts = db((db.posts.recieverID == user) & (db.posts.approved == True)).select()
+    posts = db((db.posts.recieverID == user.id) & (db.posts.approved == True)).select()
     
     # Get Relationships
-    relationships = db(db.relationships.userID == user).select().first()
+    relationships = db(db.relationships.userID == user.id).select().first()
     
     # Get Friends
     friends = relationships.friends
     
-    # Find Mutual Friends
+    # Find Mutual Friends or Pending Friends
+    mutualFriends = None
+    pendingFriends = None
     if auth.user:
-        viewerFriends = db(db.relationships.userID == auth.user).select().first().friends
-        mutualFriends = set(friends) & set(viewerFriends)
-    else:
-        mutualFriends = None
+        if (auth.user.id == user.id):
+            pendingFriends = relationships.pending
+        else:
+            viewerFriends = db(db.relationships.userID == auth.user).select().first().friends
+            mutualFriends = set(friends) & set(viewerFriends)
     
     return dict(username = username, 
                  personalName = personalName, 
@@ -55,7 +58,8 @@ def profile():
                  personalQuote = personalQuote, 
                  posts = posts, 
                  friends = friends, 
-                 mutualFriends = mutualFriends)
+                 mutualFriends = mutualFriends,
+                 pendingFriends = pendingFriends)
 
 def new_post():
     messageBody = request.vars.your_message
@@ -66,7 +70,7 @@ def new_post():
     
     if messageBody:
         recipient = db(db.auth_user.username == request.args(0)).select().first()
-        ret = db.posts.validate_and_insert(senderID=auth.user, recieverID=recipient, body=messageBody, timePosted=datetime.utcnow())
+        ret = db.posts.validate_and_insert(senderID=auth.user.id, recieverID=recipient, body=messageBody, timePosted=datetime.utcnow())
         if ret.id:
             response.flash = "Successfully posted!"
         else:
@@ -74,8 +78,14 @@ def new_post():
 
     return
 
-def home():
-    return dict()
+def manual_login():
+    username = request.vars.username;
+    password = request.vars.password;
+    user = auth.login_bare(username, password);
+    if user == False:
+        return "jQuery('#loginForm').hide();"
+    else:
+        return ""
 
 def user():
     """
