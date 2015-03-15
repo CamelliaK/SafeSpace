@@ -45,11 +45,16 @@ def profile():
     # Find Mutual Friends or Pending Friends
     mutualFriends = None
     pendingFriends = None
+    isFriend = False
     if auth.user:
         if (auth.user.id == user.id):
             pendingFriends = relationships.pending
         else:
             viewerFriends = db(db.relationships.userID == auth.user).select().first().friends
+            if user in viewerFriends:
+                isFriend = True
+            else:
+                isFriend = False
             mutualFriends = set(friends) & set(viewerFriends)
     
     return dict(username = username, 
@@ -59,7 +64,8 @@ def profile():
                  posts = posts, 
                  friends = friends, 
                  mutualFriends = mutualFriends,
-                 pendingFriends = pendingFriends)
+                 pendingFriends = pendingFriends,
+                 isFriend = isFriend)
 
 def new_post():
     messageBody = request.vars.your_message
@@ -79,14 +85,31 @@ def new_post():
     return
 
 def manual_login():
-    username = request.vars.username;
-    password = request.vars.password;
-    user = auth.login_bare(username, password);
+    username = request.vars.username
+    password = request.vars.password
+    user = auth.login_bare(username, password)
     if user == False:
-        return "jQuery('#loginForm').hide();"
+        redirect(URL('user', args=['login']), client_side=True)
     else:
-        return ""
+        redirect(URL('profile', args=[user.username]), client_side=True)
 
+def sendInvite():
+    recipientUserName = request.vars.username
+    recipient = db(db.auth_user.username == recipientUserName).select().first()
+    sender = auth.user
+    if recipient & sender:
+        db(db.relationships.userID == recipient).select().first().pending.append(sender)
+    return
+    
+def searchUser():
+    username = request.vars.searchUsername
+    user = db(db.auth_user.username == username).select().first()
+    if user:
+        redirect(URL('profile', args=[username]), client_side=True)
+        return
+    else:
+        return "jQuery('#searchResult').fadeIn(500).fadeOut(4000);"
+    
 def user():
     """
     exposes:

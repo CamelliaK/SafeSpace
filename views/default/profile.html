@@ -7,7 +7,18 @@
                 <div class="row">
                     <div class="row">
                         <div class="col-sm-6">
-                            <img src="{{=URL( 'download',args=profilePicture)}}" class="profile-image" />
+                            {{if profilePicture:}}
+                                <img src="{{=URL( 'download',args=profilePicture)}}" class="profile-image" />
+                            {{else:}}
+                                <div class="profile-image">
+                                    <span class="glyphicon glyphicon-user" style="font-size: 190px;"></span>
+                                </div>
+                            {{pass}}
+                            {{if auth.user:}}
+                                {{if (isFriend == False) & (auth.user.username != username):}}
+                                    <a class="btn btn-default" onclick="ajax('{{=URL('sendInvite', args=[username])}}')"><span class="glyphicon glyphicon-plus"></span></a>
+                                {{pass}}
+                            {{pass}}
                         </div>
                         <div class="col-sm-6">
                             <h1>{{=personalName}} <small>{{=username}}</small></h1>
