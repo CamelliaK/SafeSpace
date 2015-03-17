@@ -56,6 +56,12 @@ def profile():
             else:
                 isFriend = False
             mutualFriends = set(friends) & set(viewerFriends)
+            
+    # Get Posts to Review
+    needsReview = None
+    if auth.user:
+        needsReview = db((db.posts.approved == False) & (db.posts.recieverID != auth.user.id) & (db.posts.senderID != auth.user.id)).select()
+        
     
     return dict(username = username, 
                  personalName = personalName, 
@@ -65,7 +71,20 @@ def profile():
                  friends = friends, 
                  mutualFriends = mutualFriends,
                  pendingFriends = pendingFriends,
-                 isFriend = isFriend)
+                 isFriend = isFriend,
+                 needsReview=needsReview)
+
+def acceptPost():
+    postID = request.args(0)
+    post = db(db.posts.id == postID).select().first()
+    post.approved = True
+    post.update_record()
+    return
+
+def declinePost():
+    post = db(db.posts.id == request.args(0)).select().first()
+    post.delete()
+    return 
 
 def new_post():
     messageBody = request.vars.your_message
@@ -96,11 +115,17 @@ def manual_login():
 def sendInvite():
     recipientUserName = request.vars.username
     recipient = db(db.auth_user.username == recipientUserName).select().first()
-    sender = auth.user
-    if recipient & sender:
-        db(db.relationships.userID == recipient).select().first().pending.append(sender)
+    sender = auth.user.id
+    recRelationships = db(db.relationships.userID == recipient.id).select().first()
+    pending = recRelationships.pending
     return
-    
+
+def flagPressed():
+    return "jQuery('#friendsSidebar').hide(); jQuery('#reviewSidebar').show();"
+
+def friendPressed():
+    return "jQuery('#friendsSidebar').show(); jQuery('#reviewSidebar').hide();"
+
 def searchUser():
     username = request.vars.searchUsername
     user = db(db.auth_user.username == username).select().first()

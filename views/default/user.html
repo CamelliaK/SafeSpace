@@ -16,7 +16,7 @@
                 {{if request.args(0) == 'login':}}
                     <form id="loginForm" class="ssForm">
                         <input name="username" id="username" class="form-control" placeholder="Username" />
-                        <input name="password" id="password" class="form-control" placeholder="Password" />
+                        <input name="password" id="password" type="password" class="form-control" placeholder="Password" />
                         <input class="btn btn-primary btn-block" type="submit" value="Log in" />
                     </form>
                 {{elif request.args(0) == 'register':}}

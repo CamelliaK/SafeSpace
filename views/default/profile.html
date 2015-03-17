@@ -60,7 +60,7 @@
                                     <div class="panel-heading">Posts</div>
                                     <ul class="list-group">
                                         {{for post in posts:}}
-                                            <li class="list-group-item">{{=post.body}}</li>
+                                            <li id="post{{=post.id}}" class="list-group-item">{{=post.body}}</li>
                                         {{pass}}
                                     </ul>
                                 </div>
@@ -73,7 +73,7 @@
             </div>
         </div>
     </div>
-    <div class="ssSidebar">
+    <div id="friendsSidebar" class="ssSidebar">
         {{if friends is not None:}}
             <div class="panel panel-default">
                 <div class="panel-heading"><p class="badge">{{=len(friends)}}</p> Friends</div>
@@ -87,8 +87,6 @@
                                 </a>
                             </div>
                         {{pass}}
-                    {{else:}}
-                        <br>You have no friends yet :(
                     {{pass}}
                 </div>
             </div>
@@ -126,6 +124,18 @@
                     {{pass}}
                 </div>
             </div>
+        {{pass}}
+    </div>
+    <div id="reviewSidebar" class="ssSidebar" style="display: none;">
+        {{if needsReview is not None:}}
+        <div class="panel panel-default">
+            <div class="panel-heading"><span class="badge">{{=len(needsReview)}}</span> Posts to Review</div>
+            <ul class="list-group">
+                {{for post in needsReview:}}
+                    <li class="list-group-item">{{=post.body}} <a class="btn btn-default" onclick="ajax('{{=URL('acceptPost', args=[post.id])}}'); jQuery(this).parent().hide();">Accept</a><a class="btn btn-default" onclick="ajax('{{=URL('declinePost', args=[post.id])}}'); jQuery(this).parent().hide();">Decline</a></li>
+                {{pass}}
+            </ul>
+        </div>
         {{pass}}
     </div>
 </div>
