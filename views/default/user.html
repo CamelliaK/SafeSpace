@@ -17,7 +17,8 @@
                     <form id="loginForm" class="ssForm">
                         <input name="username" id="username" class="form-control" placeholder="Username" />
                         <input name="password" id="password" type="password" class="form-control" placeholder="Password" />
-                        <input class="btn btn-primary btn-block" type="submit" value="Log in" />
+                        <button class="btn btn-primary btn-block" type="submit">Log in</button>
+                        <a class="btn btn-success btn-block" href="{{=URL('user', args=['register'])}}">Sign up</a>
                     </form>
                 {{elif request.args(0) == 'register':}}
                     <form id="registerForm" class="ssForm">
