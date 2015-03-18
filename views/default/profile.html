@@ -99,7 +99,7 @@
                         {{for friend in mutualFriends:}}
                             <div class="row-fluid">
                                 <a class="btn btn-default" style="width: 100%; margin: 4px;" href="{{=URL('profile', args=[friend.username])}}">
-                                    <img src="{{=URL('download', args=friend.picture)}}" style="width: 20px; height: 20px" />
+                                    <img src="{{=URL('download', args=friend.picture)}}" style="width: 12px; height: 12px" />
                                     {{=friend.first_name + " " + friend.last_name}}
                                 </a>
                             </div>
@@ -115,10 +115,14 @@
                     {{if len(pendingFriends) > 0:}}
                         {{for friend in pendingFriends:}}
                             <div class="row-fluid">
-                                <a class="btn btn-default" style="width: 100%; margin: 4px;" href="{{=URL('profile', args=[friend.username])}}">
-                                    <img src="{{=URL('download', args=friend.picture)}}" style="width: 20px; height: 20px" />
-                                    {{=friend.first_name + " " + friend.last_name}}
-                                </a>
+                                <div class="btn-group btn-block">
+                                    <a class="btn btn-default" href="{{=URL('profile', args=[friend.username])}}">
+                                        <img src="{{=URL('download', args=friend.picture)}}" style="width: 20px; height: 20px" />
+                                        {{=friend.first_name + " " + friend.last_name}}
+                                    </a>
+                                    <a class="btn btn-success" onclick="ajax('{{=URL('acceptRequest', args=[friend.id])}}'); jQuery(this).parent().remove()"><span class="glyphicon glyphicon-ok-circle"></span></a>
+                                    <a class="btn btn-danger" onclick="ajax('{{=URL('refuseRequest', args=[friend.id])}}'); jQuery(this).parent().remove()"><span class="glyphicon glyphicon-ban-circle"></span></a>
+                                </div>
                             </div>
                         {{pass}}
                     {{pass}}

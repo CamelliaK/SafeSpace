@@ -93,15 +93,27 @@
                             </form>
                         </div>
                         <!-- Leftmost tabs on navbar -->
-                        <ul class="nav navbar-nav navbar-right">
+                        <ul class="nav navbar-nav navbar-right" style="height:50px;">
                             {{if auth.user:}}
                                 <li><a href={{=URL('profile', args=[auth.user.username])}}>{{=auth.user.first_name}}</a></li>
                             {{pass}}
                             <!--<li><a href={{=URL('home')}}><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>-->
                             <li class="divider-vertical"></li>
                             <!--<li><a><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></a></li>-->
-                            <li><a id="flagButton"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span></a></li>
-                            <li><a id="friendButton"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a></li>
+                            <li><a id="flagButton"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+                                {{if needsReview:}}
+                                {{if len(needsReview) > 0:}}
+                                    <span class="badge">{{=len(needsReview)}}</span>
+                                {{pass}}
+                                {{pass}}
+                                </a></li>
+                            <li class="active"><a id="friendButton"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                {{if pendingFriends:}}
+                                {{if len(pendingFriends) > 0:}}
+                                <span class="badge">{{=len(pendingFriends)}}</span>
+                                {{pass}}
+                                {{pass}}
+                                </a></li>
                             <li><a><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></a></li>
                         </ul>
                     </div><!-- End Nav Collapse -->
@@ -160,6 +172,11 @@
                 
                 jQuery('#friendButton').click(function() {
                     ajax('{{=URL('friendPressed')}}', [], ':eval');
+                });
+                
+                jQuery('.nav a').click(function() {
+                    jQuery('.nav').find('.active').removeClass("active");
+                    jQuery(this).parent().addClass("active");
                 });
             </script>
     </body>

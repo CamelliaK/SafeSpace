@@ -47,15 +47,14 @@ def profile():
     pendingFriends = None
     isFriend = False
     if auth.user:
-        if (auth.user.id == user.id):
-            pendingFriends = relationships.pending
+        viewerRel = db(db.relationships.userID == auth.user).select().first()
+        viewerFriends = viewerRel.friends
+        pendingFriends = viewerRel.pending
+        if user in viewerFriends:
+            isFriend = True
         else:
-            viewerFriends = db(db.relationships.userID == auth.user).select().first().friends
-            if user in viewerFriends:
-                isFriend = True
-            else:
-                isFriend = False
-            mutualFriends = set(friends) & set(viewerFriends)
+            isFriend = False
+        mutualFriends = set(friends) & set(viewerFriends)
             
     # Get Posts to Review
     needsReview = None
@@ -82,9 +81,14 @@ def acceptPost():
     return
 
 def declinePost():
-    post = db(db.posts.id == request.args(0)).select().first()
-    post.delete()
-    return 
+    db(db.posts.id == request.args(0)).delete()
+    return
+
+def acceptRequest():
+    return
+
+def refuseRequest():
+    return
 
 def new_post():
     messageBody = request.vars.your_message
