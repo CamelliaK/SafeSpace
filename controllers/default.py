@@ -85,6 +85,7 @@ def declinePost():
     return
 
 def acceptRequest():
+    friendID = request.args(0)
     return
 
 def refuseRequest():
@@ -117,11 +118,14 @@ def manual_login():
         redirect(URL('profile', args=[user.username]), client_side=True)
 
 def sendInvite():
-    recipientUserName = request.vars.username
-    recipient = db(db.auth_user.username == recipientUserName).select().first()
+    username = request.args(0)
+    recipient = db(db.auth_user.username == username).select().first()
     sender = auth.user.id
-    recRelationships = db(db.relationships.userID == recipient.id).select().first()
-    pending = recRelationships.pending
+    recRel = db(db.relationships.userID == recipient.id).select().first()
+    pending = recRel.pending
+    pending.append(sender)
+    recRel.update_record(pending = pending)
+    redirect(URL('profile', args=[username]), client_side=True)
     return
 
 def flagPressed():
